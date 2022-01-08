@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.2;
 
 interface IERC20 {
     function totalSupply() external view returns (uint256);
@@ -156,6 +156,7 @@ contract ForJusticeUniverse is ERC20 {
     event  Withdrawal(address indexed user, uint256 amount);
 
     constructor(IERC20 _fourJNET) ERC20("For Justice Universe", "4JU") {
+        require(_fourJNET != IERC20(address(0)), "4JU: _fourJNET can not be zero address.");
         fourJNET = _fourJNET;
     }
 
@@ -176,6 +177,7 @@ contract ForJusticeUniverse is ERC20 {
     }
 
     function maxSupply() public view returns (uint256) {
+        //address(0x000...1) is a black hole for 4JNET's burning, so 4JU's maxSupply should sub this amount.
         uint256 _maxSupply = fourJNET.totalSupply() - fourJNET.balanceOf(address(0x0000000000000000000000000000000000000001));
         return _maxSupply;
     }
